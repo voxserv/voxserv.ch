@@ -1,0 +1,15 @@
+www.voxserv.ch
+==============
+
+This Git repository is a minimalistic set of scripts that I wrote to
+manage static HTML files for this website. The design uses Twitter
+Bootstrap standard layout.
+
+Perl Template-Toolkit is required.
+
+The templates and scripts are copyleft; use them at your own disposal.
+
+The text content is my own copyright.
+
+Stanislav Sinyagin
+ssinyagin@k-open.com
