@@ -4,9 +4,18 @@
       [% active=1 %]
       [% FOREACH s IN global.sections %]
       <li [% 'class="active"' IF active %]>
+        [% active=0 %]
         <a href="#[% s.id %]">[% s.title %]</a>
+        [% IF s.defined('subsections') %]
+        <ul class="nav nav-list">
+          [% FOREACH ss IN s.subsections %]
+          <li>
+            <a href="#[% ss.id %]">[% ss.title %]</a>
+          </li>
+          [% END %]
+        </ul>
+        [% END %]
       </li>
-      [% active=0 %]
       [% END %]
     </ul>
   </div>
@@ -21,6 +30,12 @@
       <h1>[% s.title %]</h1>
     </div>
     [% s.content %]
+    [% IF s.defined('subsections') %]
+    [%   FOREACH ss IN s.subsections %]
+    <h2 id="[% ss.id %]">[% ss.title %]</h2>
+    [% ss.content %]
+    [%   END %]
+    [% END %]
   </section>
   [% END %]
 </div>

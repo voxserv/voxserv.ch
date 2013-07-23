@@ -1,0 +1,5 @@
+[% IF not global.sections.last.defined('subsections');
+     global.sections.last.subsections = [];
+   END;
+   global.sections.last.subsections.push({id=id title=title content=content});
+%]
