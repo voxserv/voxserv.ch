@@ -1,0 +1,200 @@
+[% INCLUDE header %]
+
+[% WRAPPER section id='intro' title='Introduction' %]
+<p>
+  There are many virtual PBX offerings on the market, but they are
+  typically restricted to a certain set of standard functionality, such
+  as call forwarding, ring groups, voice mail, and so on. In some
+  occasions, this standard set is insufficient, and the customer needs a
+  "smarter" solution.
+</p>
+<p>
+  VOXSERV is a system integration service for planning, setting up, and
+  support for custom, tailored telephony solutions for various business
+  needs.
+</p>
+<p>
+  Most of our solutions are using
+  <a href="http://www.freeswitch.org/">FreeSWITCH</a>
+  software. FreeSWITCH is a free, open-source IP telephony platform,
+  offering a great deal of integration and customization possibilities.
+</p>
+<p>
+  Our virtual PBX are usually hosted in a XEN VPS at a selected hosting
+  partner, but can also be hosted at the customer facilities.
+</p>
+[% END %]
+
+
+
+[% WRAPPER section id='usecases' title='Use cases' %]
+<p>
+  The following sections describe various business needs and scenarios
+  that have been implemented for our customers.
+</p>
+[% END %]
+
+
+
+
+[% WRAPPER subsection id='presencertr' title='Presence-based routing' %]
+<p>
+  The user wants to be able to tell the PBX about their presence status,
+  and route the inbound calls to different destinations: when
+  "Available", the calls go to a SIP account or a mobile phone. When
+  "Unavailable", the caller receives a short sound message, and the call
+  is hung up. The user also wants to receive an SMS message with the
+  caller details.  
+</p>
+<p>
+  The solution sets up an entry for the user presence in FreeSWITCH
+  internal database. Also there's an internal extension in the dialplan
+  which connects the user to an IVR where they can change the presence
+  status. This IVR is protected with a PIN for calls from PSTN, or
+  answers directly for internal SIP calls.
+</p>
+<p>
+  The dialplan recognizes several situations when processing the
+  incoming calls:
+  <ol>
+    <li>
+      If the presence status is set to "Unavailable", play a message and hangup.
+    </li>
+    <li>
+      If the user is "Available" and the user's SIP client is
+      registered, it tries to connect to the SIP client only.
+    </li>
+    <li>
+      If the user is "Available" and the user's SIP client is
+      not registered, it tries to connect to the mobile number.
+    </li>
+    <li>
+      Whenever the call is unsuccessful, the user receives an SMS
+      message with the sender's number set to the original caller's
+      number. The message text includes the time and the reason for
+      absence, for example: "I tried to call you at 15:49, but you were
+      busy on your mobile".
+    </li>
+  </ol>  
+</p>
+<p>
+  Also the dialplan watches the current number of incoming and outgoing
+  calls for the user, and rejects the new incoming calls if the user is
+  busy.
+</p>
+[% END %]
+
+
+
+[% WRAPPER subsection id='multiface' title='Multi-faced user' %]
+<p>
+  The user has several PSTN numbers for different business purposes, and
+  they want to know which of these numbers was called. The user has set
+  up several SIP profiles on their SIP client, and the client software
+  displays the profile name for incoming calls.
+</p>
+<p>
+  The FreeSWITCH dialplan is set up in such a way that all these
+  PSTN numbers share the same counter of active calls, and only one
+  active call is allowed. 
+</p>
+<p>
+  The user can make outgoing calls from any of those SIP profiles, and
+  the correct Caller ID is set by the PBX.
+</p>
+[% END %]
+
+
+
+[% WRAPPER subsection id='hotline' title='Hotline routing' %]
+<p>
+  A hotline service is set up for technical support, and the requirement
+  is not to lose the call even if the current on-call engineer is not
+  answering.
+</p>
+<p>
+  The PBX stores the information about the current on-call engineer in a
+  persistent database. There is also an IVR which allows the engineer to
+  switch the current on-call duty to themselves or to a colleague. The
+  IVR is protected with PIN for calls from PSTN, and does not require a
+  PIN for internal SIP calls.
+</p>
+<p>
+  Upon receiving a call on the hotline number, the PBX asks for the
+  customer PIN. Several such customers can have different PINs, and the
+  system would differentiate them when opening a new trouble ticket.
+</p>
+<p>
+  After PIN authentication, the call is routed to all known endpoints
+  for the current on-call engineer (SIP clients and PSTN numbers). On
+  mobile numbers, the engineer hears a prompt "Press 1 to answer the
+  call", and the call is connected only after the digit 1 is
+  pressed. This protects the hotline calls from being routed to an
+  engineer's voice mailbox.
+</p>
+<p>
+  If the engineer is not answering, the caller is prompted to record a
+  voice message. This message is then automatically forwarded to the
+  ticketing system. The ticketing system will send SMS messages to all
+  support engineers every 15 minutes until the ticket is taken into
+  ownership.
+</p>
+<p>
+  In this scenario, there is only one on-call person at any given
+  time. It is also possible to set up some more complex routing, with
+  simultaneous calls to mobile and SIP numbers of several people. Also
+  different groups of support engineers can be selected, based on which
+  customer has called.
+</p>
+[% END %]
+
+
+
+[% WRAPPER subsection id='confbridge' title='Conference bridge' %]
+<p>
+  The user needs a conference bridge which is reachable from different
+  countries at local call cost, and with a possibility to connect from
+  any Skype account.
+</p>
+<p>
+  FreeSWITCH supports many various options for audio conferencing, and
+  the following scenario is one of the possible ways to oset up a
+  conference bridge.
+</p>
+<p>
+  When a user calls to the conference bridge, they are prompted to enter
+  a conference room ID. The PBX supports multiple conference rooms (for
+  example, one per employee), and guest access is defined by a random
+  4-digit number. The guests have to wait until the moderator logs in
+  and opens the bridge. The moderator uses the same access phone number,
+  but enters a different room ID. Then the moderator is also asked for a
+  PIN.
+</p>
+<p>
+  The conference bridge can have multiple PSTN numbers for incoming
+  calls from different countries. Any worldwide SIP provider which
+  supports multiple suimultaneous channels is suitable for this.
+</p>
+<p>
+  Also the bridge may have an <a href="http://www.inum.net/">INUM</a>
+  number, and those numbers are routed from many regional telephony
+  providers. Also there are numerous local access gateways in every part
+  of the world.
+</p>
+<p>
+  American toll-free numbers (1-800) can be called from any Skype
+  account, including those with zero credit. The conference bridge owner
+  needs to take over the costs for incoming calls.
+</p>
+<p>
+  The conference calls can also be automatically recorded, and the users
+  will hear a warning message in this case before starting the
+  conference. The moderator may convert the recordings to MP3 format and
+  share with the participants. Old recordings can be automatically
+  deleted after a certain period of time.
+</p>
+[% END %]
+
+[% INCLUDE printsections %]
+          
+[% INCLUDE footer %]
