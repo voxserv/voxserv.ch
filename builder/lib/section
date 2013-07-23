@@ -1,0 +1,1 @@
+[% global.sections.push({id=id title=title content=content}) %]

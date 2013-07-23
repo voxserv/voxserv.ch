@@ -1,0 +1,26 @@
+[%#
+<html>
+  <body>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        %]
+      </div><!--/row-->
+      
+      <hr>
+      
+      <footer>
+        <p>&copy; <a href="http://www.k-open.com">k-open.com</a> 2013</p>
+      </footer>
+      
+    </div><!--/.fluid-container-->
+    
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
+[%#
+Local Variables:
+mode: html
+indent-tabs-mode: nil
+End:
+%]
